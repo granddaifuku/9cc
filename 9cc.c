@@ -24,11 +24,19 @@ struct Token {
 // Current token
 Token *token;
 
+char *user_input;
+
 // The function to report error
 // Take same arguments as "printf" e.g., printf("%d, %d", 1, 2);
-void error(char *fmt, ...) {
+// va_list is variable length arguments
+void error_at(char *loc, char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
+
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
+  fprintf(stderr, "%*s", pos, " "); // Output pos number of spaces.
+  fprintf(stderr, "^ ");
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
   exit(1);
@@ -47,7 +55,7 @@ bool consume(char op) {
 // Otherwise report the error
 void expect(char op) {
   if (token->kind != TK_RESERVED || token->str[0] != op)
-	error("The next token is not '%c'", op);
+	error_at(token->str, "The next token is not '%c'", op);
   token = token->next;
 }
 
@@ -55,7 +63,7 @@ void expect(char op) {
 // Otherwise report the error
 int expect_number() {
   if (token->kind != TK_NUM)
-	error("Not a number");
+	error_at(token->str, "Not a number");
   int val = token->val;
   token = token->next;
   return val;
@@ -75,7 +83,8 @@ Token *new_token(TokenKind kind, Token *cur, char *str) {
 }
 
 // Tokenize the input strint
-Token *tokenize(char *p) {
+Token *tokenize() {
+  char *p = user_input;
   Token head;
   head.next = NULL;
   Token *cur = &head;
@@ -97,7 +106,7 @@ Token *tokenize(char *p) {
 	  continue;
 	}
 
-	error("Could not tokenize");
+	error_at(token->str, "Could not tokenize");
   }
 
   new_token(TK_EOF, cur, p);
@@ -109,9 +118,11 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "Invalid number of args\n");
 	return 1;
   }
-
+  
+  user_input = argv[1];
+  
   // Tokenize
-  token = tokenize(argv[1]);
+  token = tokenize();
 
   // Export the first part of Assembly
   printf(".intel_syntax noprefix\n");
