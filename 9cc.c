@@ -5,41 +5,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+//
+// Tokenizer
+//
+
 // Type of tokens
-  typedef enum {
+typedef enum {
   TK_RESERVED, // symbols
   TK_NUM, // numbers
   TK_EOF, // EOF
 } TokenKind;
 
-// Type of nodes in abstract syntax tree
-typedef enum {
-  ND_ADD, // +
-  ND_SUB, // -
-  ND_MUL, // *
-  ND_DIV, // /
-  ND_NUM, // Number
-} NodeKind;
-
 typedef struct Token Token;
-typedef struct Node Node;
-
-Node *expr();
-Node *mul();
-Node *primary();
 
 struct Token {
   TokenKind kind; // The type of token
   Token *next; // The next token
   int val; // The value of token if it is number
   char *str; // Token string
-};
-
-struct Node {
-  NodeKind kind; // The type of node
-  Node *lhs; // Left-hand side
-  Node *rhs; // Right-hand side
-  int val; // The value of node if it is number
 };
 
 // Current token
@@ -133,6 +116,32 @@ Token *tokenize() {
   new_token(TK_EOF, cur, p);
   return head.next;
 }
+
+//
+// Parser
+//
+
+// Type of nodes in abstract syntax tree
+typedef enum {
+  ND_ADD, // +
+  ND_SUB, // -
+  ND_MUL, // *
+  ND_DIV, // /
+  ND_NUM, // Number
+} NodeKind;
+
+typedef struct Node Node;
+
+Node *expr();
+Node *mul();
+Node *primary();
+
+struct Node {
+  NodeKind kind; // The type of node
+  Node *lhs; // Left-hand side
+  Node *rhs; // Right-hand side
+  int val; // The value of node if it is number
+};
 
 
 Node *new_node(NodeKind kind, Node *lhs, Node *rhs) {
