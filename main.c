@@ -5,29 +5,41 @@ Token *token;
 
 char *user_input;
 
+Node *code[100];
+
 int main(int argc, char **argv) {
   if (argc != 2) {
-	fprintf(stderr, "Invalid number of args\n");
+	error("Invalid number of args");
 	return 1;
   }
-  
+
   user_input = argv[1];
-  
   // Tokenize
   token = tokenize();
-  // Parse
-  Node *node = expr();
+  program();
 
   // Export the first part of Assembly
   printf(".intel_syntax noprefix\n");
   printf(".globl main\n");
   printf("main:\n");
 
-  // Generate code with recurisvely visiting the abstract syntax tree
-  gen(node);
+  // Prologue
+  // Reserve the memory for 26 variables
+  printf("  push rbp\n");
+  printf("  mov rbp, rsp\n");
+  printf("  sub rsp, 208\n");
 
-  // The value of the entire expression remains the stack top
-  printf("  pop rax\n");
+  // Generate code with recurisvely visiting the abstract syntax tree
+  for (int i = 0; code[i]; i++) {
+	gen(code[i]);
+
+	//   // The value of the entire expression remains the stack top
+	printf("  pop rax\n");
+  }
+
+  // Epilogue
+  printf("  mov rsp, rbp\n"); // Let rsp shows the return address
+  printf("  pop rbp\n");
   printf("  ret\n");
   return 0;
 }
