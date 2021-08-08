@@ -35,5 +35,7 @@ assert 7 "a = 4; b = 5; a / 2 + b;"
 assert 3 "foo = 3;"
 assert 5 "bar = 2 + 3;"
 assert 8 "foo = 2; bar = 4; foo * bar;"
+assert 2 "return 2;"
+assert 14 "a = 3; b = 5 * 6 - 8; return a + b / 2;"
 
 echo OK

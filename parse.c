@@ -3,7 +3,7 @@
 // Return true and read the next pointer if current token is the expected symbol
 // Otherwise return false
 bool consume(char *op) {
-  if (token->kind != TK_RESERVED || strlen(op) != token->len || memcmp(token->str, op, token->len))
+  if ((token->kind != TK_RESERVED && token->kind != TK_RET) || strlen(op) != token->len || memcmp(token->str, op, token->len))
 	return false;
   token = token->next;
   return true;
@@ -63,10 +63,18 @@ void program() {
   code[i] = NULL;
 }
 
-// stmt = expr ";"
+// stmt = expr ";" | "return" expr ";"
 Node *stmt() {
-  Node *node = expr();
-  expect(";");
+  Node *node;
+  if (consume("return")) {
+	node = calloc(1, sizeof(Node));
+	node->kind = ND_RET;
+	node->lhs = expr();
+  } else {
+    node = expr();
+  }
+  if (!consume(";"))
+	error_at(token->str, "token is not ';'");
   return node;
 }
 

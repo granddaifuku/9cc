@@ -37,3 +37,7 @@ int count_offset() {
 bool is_alphabet(char *p) {
   return 'a' <= *p && *p <= 'z';
 }
+
+int is_alnum(char c) {
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || (c == '_');
+}

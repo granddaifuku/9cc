@@ -20,6 +20,13 @@ void gen(Node *node) {
 	printf("  mov [rax], rdi\n"); // Store the value of rdi into the address where rax indicates
 	printf("  push rdi\n");
 	return;
+  case ND_RET:
+	gen(node->lhs); // the return value
+	printf("  pop rax\n");
+	printf("  mov rsp, rbp\n");
+	printf("  pop rbp\n");
+	printf("  ret\n");
+	return;
   }
 
   gen(node->lhs);

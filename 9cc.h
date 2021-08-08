@@ -14,6 +14,7 @@ extern char *user_input;
 extern void error(char *fmt, ...);
 extern void error_at(char *loc, char *fmt, ...);
 extern bool is_alphabet(char *p);
+extern int is_alnum(char c);
 
 //
 // Tokenizer
@@ -24,6 +25,7 @@ typedef enum {
   TK_RESERVED, // symbols
   TK_IDENT, // identifier
   TK_NUM, // numbers
+  TK_RET, // return
   TK_EOF, // EOF
 } TokenKind;
 
@@ -64,6 +66,7 @@ typedef enum {
   ND_LES, // <
   ND_ASS, // =
   ND_LVA, // local variable
+  ND_RET, // return
   ND_NUM, // Number
 } NodeKind;
 
