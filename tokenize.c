@@ -33,9 +33,14 @@ Token *tokenize() {
 	  cur->len = 1;
 	  continue;
 	}
-	if ('a' <= *p && *p <= 'z') {
-	  cur = new_token(TK_IDENT, cur, p++);
-	  cur->len = 1;
+	if (is_alphabet(p)) {
+	  int len = 0;
+	  while (is_alphabet(p + len)) {
+		len++;
+	  }
+	  cur = new_token(TK_IDENT, cur, p);
+	  cur->len = len;
+	  p += len;
 	  continue;
 	}
 	if (isdigit(*p)) {

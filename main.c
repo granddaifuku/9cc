@@ -7,6 +7,8 @@ char *user_input;
 
 Node *code[100];
 
+LVar *locals;
+
 int main(int argc, char **argv) {
   if (argc != 2) {
 	error("Invalid number of args");
@@ -27,7 +29,7 @@ int main(int argc, char **argv) {
   // Reserve the memory for 26 variables
   printf("  push rbp\n");
   printf("  mov rbp, rsp\n");
-  printf("  sub rsp, 208\n");
+  printf("  sub rsp, %d\n", count_offset());
 
   // Generate code with recurisvely visiting the abstract syntax tree
   for (int i = 0; code[i]; i++) {

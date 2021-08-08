@@ -25,4 +25,15 @@ void error_at(char *loc, char *fmt, ...) {
   exit(1);
 }
 
+int count_offset() {
+  int i = 0;
+  for (LVar *var = locals; var; var = var->next) {
+	i++;
+  }
 
+  return i * 8;
+}
+
+bool is_alphabet(char *p) {
+  return 'a' <= *p && *p <= 'z';
+}

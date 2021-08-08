@@ -32,5 +32,8 @@ assert 1 "0!=1;"
 assert 1 "0==0;"
 assert 2 "a = 2;"
 assert 7 "a = 4; b = 5; a / 2 + b;"
+assert 3 "foo = 3;"
+assert 5 "bar = 2 + 3;"
+assert 8 "foo = 2; bar = 4; foo * bar;"
 
 echo OK

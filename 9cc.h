@@ -8,6 +8,14 @@
 extern char *user_input;
 
 //
+// Tools
+//
+
+extern void error(char *fmt, ...);
+extern void error_at(char *loc, char *fmt, ...);
+extern bool is_alphabet(char *p);
+
+//
 // Tokenizer
 //
 
@@ -28,9 +36,6 @@ struct Token {
   char *str; // Token string
   int len; // The length of token
 };
-
-extern void error(char *fmt, ...);
-extern void error_at(char *loc, char *fmt, ...);
 
 extern bool consume(char *op);
 extern Token *consume_ident();
@@ -88,3 +93,21 @@ extern void gen(Node *node);
 extern void gen_lval(Node *node);
 
 extern Node *code[100];
+
+//
+// Local variables
+//
+
+typedef struct LVar LVar;
+
+// Type of struct local variables
+struct LVar {
+  LVar *next; // Next variable or NULL
+  char *name; // The name of the variable
+  int len; // The length of the variable
+  int offset; // The offset from RBP
+};
+
+extern LVar *locals;
+extern LVar *find_lvar(Token *tok);
+extern int count_offset();
