@@ -11,10 +11,12 @@ extern char *user_input;
 // Tools
 //
 
+extern int label_number;
 extern void error(char *fmt, ...);
 extern void error_at(char *loc, char *fmt, ...);
 extern bool is_alphabet(char *p);
 extern int is_alnum(char c);
+extern int label_num();
 
 //
 // Tokenizer
@@ -23,20 +25,22 @@ extern int is_alnum(char c);
 // Type of tokens
 typedef enum {
   TK_RESERVED, // symbols
-  TK_IDENT, // identifier
-  TK_NUM, // numbers
-  TK_RET, // return
-  TK_EOF, // EOF
+  TK_IDENT,    // identifier
+  TK_NUM,      // numbers
+  TK_RET,      // return
+  TK_IF,       // if
+  TK_ELSE,     // else
+  TK_EOF,      // EOF
 } TokenKind;
 
 typedef struct Token Token;
 
 struct Token {
   TokenKind kind; // The type of token
-  Token *next; // The next token
-  int val; // The value of token if it is number
-  char *str; // Token string
-  int len; // The length of token
+  Token *next;    // The next token
+  int val;        // The value of token if it is number
+  char *str;      // Token string
+  int len;        // The length of token
 };
 
 extern bool consume(char *op);
@@ -56,28 +60,35 @@ extern Token *token;
 
 // Type of nodes in abstract syntax tree
 typedef enum {
-  ND_ADD, // +
-  ND_SUB, // -
-  ND_MUL, // *
-  ND_DIV, // /
-  ND_EQT, // ==
-  ND_NEQ, // !=
-  ND_LEQ, // <=
-  ND_LES, // <
-  ND_ASS, // =
-  ND_LVA, // local variable
-  ND_RET, // return
-  ND_NUM, // Number
+  ND_ADD,     // +
+  ND_SUB,     // -
+  ND_MUL,     // *
+  ND_DIV,     // /
+  ND_EQT,     // ==
+  ND_NEQ,     // !=
+  ND_LEQ,     // <=
+  ND_LES,     // <
+  ND_ASS,     // =
+  ND_LVA,     // local variable
+  ND_RET,     // return
+  ND_IF,      // if
+  ND_IF_ELSE, // if-else
+  ND_NUM,     // Number
 } NodeKind;
 
 typedef struct Node Node;
 
 struct Node {
   NodeKind kind; // The type of node
-  Node *lhs; // Left-hand side
-  Node *rhs; // Right-hand side
-  int val; // The value of node if it is number
-  int offset; // The offset from the base pointer to the local variable
+  Node *lhs;     // Left-hand side
+  Node *rhs;     // Right-hand side
+  int val;       // The value of node if it is number
+  int offset;    // The offset from the base pointer to the local variable
+
+  // "if" ( cond ) then "else" els
+  Node *cond;
+  Node *then;
+  Node *els;
 };
 
 extern Node *new_node(NodeKind kind, Node *lhs, Node *rhs);
@@ -107,7 +118,7 @@ typedef struct LVar LVar;
 struct LVar {
   LVar *next; // Next variable or NULL
   char *name; // The name of the variable
-  int len; // The length of the variable
+  int len;    // The length of the variable
   int offset; // The offset from RBP
 };
 

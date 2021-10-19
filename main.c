@@ -9,12 +9,15 @@ Node *code[100];
 
 LVar *locals;
 
+int label_number;
+
 int main(int argc, char **argv) {
   if (argc != 2) {
-	error("Invalid number of args");
-	return 1;
+    error("Invalid number of args");
+    return 1;
   }
 
+  label_number = 0;
   user_input = argv[1];
   // Tokenize
   token = tokenize();
@@ -33,10 +36,10 @@ int main(int argc, char **argv) {
 
   // Generate code with recurisvely visiting the abstract syntax tree
   for (int i = 0; code[i]; i++) {
-	gen(code[i]);
+    gen(code[i]);
 
-	//   // The value of the entire expression remains the stack top
-	printf("  pop rax\n");
+    //   // The value of the entire expression remains the stack top
+    printf("  pop rax\n");
   }
 
   // Epilogue

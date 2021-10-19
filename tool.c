@@ -28,16 +28,17 @@ void error_at(char *loc, char *fmt, ...) {
 int count_offset() {
   int i = 0;
   for (LVar *var = locals; var; var = var->next) {
-	i++;
+    i++;
   }
 
   return i * 8;
 }
 
-bool is_alphabet(char *p) {
-  return 'a' <= *p && *p <= 'z';
-}
+bool is_alphabet(char *p) { return 'a' <= *p && *p <= 'z'; }
 
 int is_alnum(char c) {
-  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || (c == '_');
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') ||
+         ('0' <= c && c <= '9') || (c == '_');
 }
+
+int label_num() { return label_number++; }
