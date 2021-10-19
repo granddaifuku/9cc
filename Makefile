@@ -7,8 +7,14 @@ OBJS=$(SRCS:.c=.o)
 
 $(OBJS): 9cc.h
 
+build:
+	docker build ./ -t compilerbook
+
 test: 9cc
 	./test.sh
+
+down:
+	docker rmi compilerbook
 
 clean:
 	rm -f 9cc *.o *~ tmp*
