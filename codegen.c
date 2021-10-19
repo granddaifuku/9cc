@@ -1,4 +1,5 @@
 #include "9cc.h"
+#include <stdio.h>
 
 void gen(Node *node) {
   if (node->kind == ND_NUM) {
@@ -56,6 +57,18 @@ void gen(Node *node) {
     printf("  .Lelse%d:\n", label_else);
     gen(node->els);
     printf("  .Lend%d:\n", label_end);
+    return;
+  }
+  if (node->kind == ND_WHILE) {
+    int label = label_num();
+    printf("  .Lbegin%d:\n", label);
+    gen(node->cond);
+    printf("  pop rax\n");
+    printf("  cmp rax, 0\n");
+    printf("  je .Lend%d\n", label);
+    gen(node->then);
+    printf("  jmp .Lbegin%d\n", label);
+    printf("  .Lend%d:\n", label);
     return;
   }
 

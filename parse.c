@@ -1,10 +1,12 @@
 #include "9cc.h"
+#include <stdlib.h>
 
 // Return true and read the next pointer if current token is the expected symbol
 // Otherwise return false
 bool consume(char *op) {
   if ((token->kind != TK_RESERVED && token->kind != TK_RET &&
-       token->kind != TK_IF && token->kind != TK_ELSE) ||
+       token->kind != TK_IF && token->kind != TK_ELSE &&
+       token->kind != TK_WHILE) ||
       strlen(op) != token->len || memcmp(token->str, op, token->len))
     return false;
   token = token->next;
@@ -68,6 +70,17 @@ void program() {
 // "return" expr ";" |
 // "if" "(" expr ")" stmt ("else" stmt)?
 Node *stmt() {
+  if (consume("while")) {
+    Node *node;
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_WHILE;
+    expect("(");
+    node->cond = expr();
+    expect(")");
+    node->then = stmt();
+
+    return node;
+  }
   if (consume("if")) {
     Node *node;
     node = calloc(1, sizeof(Node));

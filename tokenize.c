@@ -56,6 +56,13 @@ Token *tokenize() {
       p += 4;
       continue;
     }
+    if (strncmp(p, "while", 5) == 0 && !is_alnum(p[5])) {
+      cur = new_token(TK_WHILE, cur, p);
+      cur->str = p;
+      cur->len = 5;
+      p += 5;
+      continue;
+    }
     if (is_alphabet(p)) {
       int len = 0;
       while (is_alphabet(p + len)) {

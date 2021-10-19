@@ -30,6 +30,7 @@ typedef enum {
   TK_RET,      // return
   TK_IF,       // if
   TK_ELSE,     // else
+  TK_WHILE,    // while
   TK_EOF,      // EOF
 } TokenKind;
 
@@ -73,6 +74,7 @@ typedef enum {
   ND_RET,     // return
   ND_IF,      // if
   ND_IF_ELSE, // if-else
+  ND_WHILE,   // while
   ND_NUM,     // Number
 } NodeKind;
 
