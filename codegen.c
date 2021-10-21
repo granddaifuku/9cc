@@ -71,6 +71,20 @@ void gen(Node *node) {
     printf("  .Lend%d:\n", label);
     return;
   }
+  if (node->kind == ND_FOR) {
+    int label = label_num();
+    gen(node->init);
+    printf("  .Lbegin%d:\n", label);
+    gen(node->cond);
+    printf("  pop rax\n");
+    printf("  cmp rax, 0\n");
+    printf("  je .Lend%d\n", label);
+    gen(node->then);
+    gen(node->updt);
+    printf("  jmp .Lbegin%d\n", label);
+    printf("  .Lend%d:\n", label);
+    return;
+  }
 
   gen(node->lhs);
   gen(node->rhs);

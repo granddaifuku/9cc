@@ -63,6 +63,13 @@ Token *tokenize() {
       p += 5;
       continue;
     }
+    if (strncmp(p, "for", 3) == 0 && !is_alnum(p[3])) {
+      cur = new_token(TK_FOR, cur, p);
+      cur->str = p;
+      cur->len = 3;
+      p += 3;
+      continue;
+    }
     if (is_alphabet(p)) {
       int len = 0;
       while (is_alphabet(p + len)) {

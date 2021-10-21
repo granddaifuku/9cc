@@ -6,7 +6,7 @@
 bool consume(char *op) {
   if ((token->kind != TK_RESERVED && token->kind != TK_RET &&
        token->kind != TK_IF && token->kind != TK_ELSE &&
-       token->kind != TK_WHILE) ||
+       token->kind != TK_WHILE && token->kind != TK_FOR) ||
       strlen(op) != token->len || memcmp(token->str, op, token->len))
     return false;
   token = token->next;
@@ -70,6 +70,30 @@ void program() {
 // "return" expr ";" |
 // "if" "(" expr ")" stmt ("else" stmt)?
 Node *stmt() {
+  if (consume("for")) {
+    Node *node;
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_FOR;
+    expect("(");
+    // read init if exists
+    if (!consume(";")) {
+      node->init = expr();
+      expect(";");
+    }
+    // read cond if exists
+    if (!consume(";")) {
+      node->cond = expr();
+      expect(";");
+    }
+    // read update if exists
+    if (!consume(")")) {
+      node->updt = expr();
+      expect(")");
+    }
+    node->then = stmt();
+
+    return node;
+  }
   if (consume("while")) {
     Node *node;
     node = calloc(1, sizeof(Node));

@@ -31,6 +31,7 @@ typedef enum {
   TK_IF,       // if
   TK_ELSE,     // else
   TK_WHILE,    // while
+  TK_FOR,      // for
   TK_EOF,      // EOF
 } TokenKind;
 
@@ -75,6 +76,7 @@ typedef enum {
   ND_IF,      // if
   ND_IF_ELSE, // if-else
   ND_WHILE,   // while
+  ND_FOR,     // for
   ND_NUM,     // Number
 } NodeKind;
 
@@ -88,9 +90,13 @@ struct Node {
   int offset;    // The offset from the base pointer to the local variable
 
   // "if" ( cond ) then "else" els
+  // "while" (cond) then
+  // "for" (init; cond; updt) then
   Node *cond;
   Node *then;
   Node *els;
+  Node *init;
+  Node *updt;
 };
 
 extern Node *new_node(NodeKind kind, Node *lhs, Node *rhs);
