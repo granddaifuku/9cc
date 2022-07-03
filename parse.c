@@ -68,8 +68,21 @@ void program() {
 
 // stmt = expr ";" |
 // "return" expr ";" |
-// "if" "(" expr ")" stmt ("else" stmt)?
+// "if" "(" expr ")" stmt ("else" stmt)? |
+// "{" stmt* "}"
 Node *stmt() {
+  if (consume("{")) {
+    Vector *v = new_vector();
+    while (!consume("}")) {
+      vec_push(v, (void *)stmt());
+    }
+    Node *node;
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_BLOCK;
+    node->stmts = v;
+
+    return node;
+  }
   if (consume("for")) {
     Node *node;
     node = calloc(1, sizeof(Node));

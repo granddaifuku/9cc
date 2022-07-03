@@ -18,6 +18,17 @@ extern bool is_alphabet(char *p);
 extern int is_alnum(char c);
 extern int label_num();
 
+typedef struct Vector Vector;
+
+struct Vector {
+  void **data;
+  int len;
+  int capacity;
+};
+
+extern Vector *new_vector();
+extern void vec_push(Vector *v, void *e);
+
 //
 // Tokenizer
 //
@@ -77,6 +88,7 @@ typedef enum {
   ND_IF_ELSE, // if-else
   ND_WHILE,   // while
   ND_FOR,     // for
+  ND_BLOCK,   // block: {}
   ND_NUM,     // Number
 } NodeKind;
 
@@ -97,6 +109,7 @@ struct Node {
   Node *els;
   Node *init;
   Node *updt;
+  Vector *stmts;
 };
 
 extern Node *new_node(NodeKind kind, Node *lhs, Node *rhs);

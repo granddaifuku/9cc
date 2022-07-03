@@ -2,6 +2,15 @@
 #include <stdio.h>
 
 void gen(Node *node) {
+  if (node->kind == ND_BLOCK) {
+    Vector *stmts = node->stmts;
+    for (int i = 0; i < stmts->len; i++) {
+      Node *node = stmts->data[i];
+      gen(node);
+      printf("  pop rax\n");
+    }
+    return;
+  }
   if (node->kind == ND_NUM) {
     printf("  push %d\n", node->val);
     return;

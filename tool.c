@@ -1,4 +1,5 @@
 #include "9cc.h"
+#include <stdlib.h>
 
 // The function to report error
 // Take same arguments as "printf" e.g., printf("%d, %d", 1, 2);
@@ -42,3 +43,22 @@ int is_alnum(char c) {
 }
 
 int label_num() { return label_number++; }
+
+Vector *new_vector() {
+  Vector *vec = malloc(sizeof(Vector));
+  int size = 16;
+
+  vec->data = malloc(sizeof(void *) * size);
+  vec->capacity = size;
+  vec->len = 0;
+
+  return vec;
+}
+
+void vec_push(Vector *v, void *e) {
+  if (v->len == v->capacity) {
+    v->capacity *= 2;
+    v->data = realloc(v->data, sizeof(void *) * v->capacity);
+  }
+  v->data[v->len++] = e;
+}

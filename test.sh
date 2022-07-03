@@ -41,5 +41,7 @@ assert 2 "a = 1; b = 2; if (a == 1) return b;"
 assert 3 "a = 1; b = 2; if (a != 1) return b; else return 3;"
 assert 10 "a = 0; b = 10; while (a != b) a = a + 1; return a;"
 assert 10 "a = 0; for (i = 0; i < 10; i=i+1) a = a + 1; return a;"
+assert 5 "{return 5;}"
+assert 20 "a = 0; for (i = 0; i < 10; i=i+1) {b = 2; a = a + b;} return a;"
 
 echo OK
